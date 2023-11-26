@@ -7,7 +7,7 @@ import { Todo } from '../../types/Todo';
 import { Status } from '../../types/Status';
 
 export const TodoList: React.FC = () => {
-  const todos = useAppSelector(state => state.todos);
+  const { todos } = useAppSelector(state => state.todos);
   const { query, status } = useAppSelector(state => state.filter);
 
   const [filterError, setFilterError] = useState(false);
@@ -84,7 +84,7 @@ export const TodoList: React.FC = () => {
 
           <tbody>
             {todosToDisplay.map((todo) => (
-              <TodoItem todo={todo} />
+              <TodoItem key={todo.title} todo={todo} />
             ))}
           </tbody>
         </table>

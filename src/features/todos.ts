@@ -1,26 +1,42 @@
+/* eslint-disable no-param-reassign */
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Todo } from '../types/Todo';
+import { getTodos } from '../api';
 
-const initialTodos: Todo[] = [];
+export const init = createAsyncThunk('todos/fetch', () => {
+  return getTodos();
+});
 
-type SetAction = {
-  type: 'todos/SET',
-  payload: Todo[]
+type InitialState = {
+  loading: boolean,
+  todos: Todo[],
 };
 
-type Action = SetAction;
-
-const set = (payload: Todo[]): Action => ({ type: 'todos/SET', payload });
-
-export const actions = { set };
-
-const todosReducer = (todos = initialTodos, action: Action): Todo[] => {
-  switch (action.type) {
-    case 'todos/SET':
-      return action.payload;
-
-    default:
-      return todos;
-  }
+const initialState: InitialState = {
+  loading: false,
+  todos: [],
 };
 
-export default todosReducer;
+const todosSlice = createSlice({
+  name: 'todos',
+  initialState,
+  reducers: {
+
+  },
+  extraReducers: (builder) => {
+    builder.addCase(init.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(init.fulfilled, (state, action) => {
+      state.todos = action.payload;
+      state.loading = false;
+    });
+
+    builder.addCase(init.rejected, (state) => {
+      state.loading = false;
+    });
+  },
+});
+
+export default todosSlice.reducer;

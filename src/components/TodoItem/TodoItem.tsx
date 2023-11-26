@@ -2,21 +2,16 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { actions as currentTodoActions } from '../../features/currentTodo';
 import { Todo } from '../../types/Todo';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
+import { setCurrentTodo /* , removeCurrentTodo */ } from '../../features/currentTodo';
 
 type Props = {
   todo: Todo,
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const selectedTodo = useAppSelector(state => state.currentTodo);
-
-  const dispatch = useAppDispatch();
-
-  const setCurrentTodo = (newCurrentTodo: Todo) => dispatch(currentTodoActions.setTodo(newCurrentTodo));
-  const removeCurrentTodo = () => dispatch(currentTodoActions.removeTodo());
+  const { currentTodo } = useAppSelector(state => state.currentTodo);
 
   return (
     <tr data-cy="todo" key={todo.id}>
@@ -39,19 +34,18 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
           className="button"
           type="button"
           onClick={() => {
-            if (selectedTodo === todo) {
-              removeCurrentTodo();
+            // if (currentTodo === todo) {
+            //   removeCurrentTodo();
 
-              return;
-            }
+            //   return;
+            // }
 
-            removeCurrentTodo();
             setCurrentTodo(todo);
           }}
         >
           <span className="icon">
             <i className={classNames('far fa-eye-slash', {
-              'fa-eye': selectedTodo !== todo,
+              'fa-eye': currentTodo !== todo,
             })}
             />
           </span>

@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { actions as filterActions } from '../../features/filter';
+import { changeQuery, changeStatus } from '../../features/filter';
 import { Status } from '../../types/Status';
 
 export const TodoFilter: React.FC = () => {
@@ -10,8 +10,8 @@ export const TodoFilter: React.FC = () => {
 
   const { query } = useAppSelector(state => state.filter);
 
-  const setQuery = (newQuery: string) => dispatch(filterActions.changeQuery(newQuery));
-  const setStatus = (status: Status) => dispatch(filterActions.changeStatus(status));
+  const setQuery = (newQuery: string) => dispatch(changeQuery(newQuery));
+  const setStatus = (status: Status) => dispatch(changeStatus(status));
 
   console.log(useAppSelector(state => state.filter));
 

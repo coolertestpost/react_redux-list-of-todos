@@ -1,43 +1,71 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-param-reassign */
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Todo } from '../types/Todo';
 
-// we use string literal as a type to avoid mistype in future
-type RemoveTodoAction = { type: 'currentTodo/REMOVE' };
-
-// payload is a typical name for an action data
-type SetTodoAction = {
-  type: 'currentTodo/SET';
-  payload: Todo;
+type IniailCurrentTodoState = {
+  currentTodo: Todo | null,
 };
 
-// Action creator return type protect us from a mistype
-const removeTodo = (): RemoveTodoAction => ({ type: 'currentTodo/REMOVE' });
+const initialState: IniailCurrentTodoState = {
+  currentTodo: null,
+};
 
-const setTodo = (todo: Todo): SetTodoAction => ({
-  type: 'currentTodo/SET',
-  payload: todo,
+const currentTodoSlice = createSlice({
+  name: 'currentTodo',
+  initialState,
+  reducers: {
+    setCurrentTodo: (state, action: PayloadAction<Todo>) => {
+      state.currentTodo = action.payload;
+    },
+    removeCurrentTodo: (state) => {
+      state.currentTodo = null;
+    },
+  },
 });
 
-// These actions will be used in the application
-export const actions = { setTodo, removeTodo };
+export const { setCurrentTodo, removeCurrentTodo } = currentTodoSlice.actions;
 
-type State = Todo | null;
-type Action = SetTodoAction | RemoveTodoAction;
+export default currentTodoSlice.reducer;
 
-const currentTodoReducer = (
-  state: State = null,
-  action: Action,
-): State => {
-  switch (action.type) {
-    // Implement all actions here
-    case 'currentTodo/SET':
-      return action.payload;
+// // we use string literal as a type to avoid mistype in future
+// type RemoveTodoAction = { type: 'currentTodo/REMOVE' };
 
-    case 'currentTodo/REMOVE':
-      return null;
+// // payload is a typical name for an action data
+// type SetTodoAction = {
+//   type: 'currentTodo/SET';
+//   payload: Todo;
+// };
 
-    default:
-      return state;
-  }
-};
+// // Action creator return type protect us from a mistype
+// const removeTodo = (): RemoveTodoAction => ({ type: 'currentTodo/REMOVE' });
 
-export default currentTodoReducer;
+// const setTodo = (todo: Todo): SetTodoAction => ({
+//   type: 'currentTodo/SET',
+//   payload: todo,
+// });
+
+// // These actions will be used in the application
+// export const actions = { setTodo, removeTodo };
+
+// type State = Todo | null;
+// type Action = SetTodoAction | RemoveTodoAction;
+
+// const currentTodoReducer = (
+//   state: State = null,
+//   action: Action,
+// ): State => {
+//   switch (action.type) {
+//     // Implement all actions here
+//     case 'currentTodo/SET':
+//       return action.payload;
+
+//     case 'currentTodo/REMOVE':
+//       return null;
+
+//     default:
+//       return state;
+//   }
+// };
+
+// export default currentTodoReducer;

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,28 +8,17 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { useAppDispatch, useAppSelector } from './app/hooks';
-import { Todo } from './types/Todo';
-import { actions } from './features/todos';
-import { getTodos } from './api';
+
+import * as todosActions from './features/todos';
 
 export const App: React.FC = () => {
+  const { currentTodo } = useAppSelector(state => state.currentTodo);
+  const { loading } = useAppSelector(state => state.todos);
+
   const dispatch = useAppDispatch();
-  const selectedTodo = useAppSelector(state => state.currentTodo);
-
-  const [loading, setLoading] = useState(false);
-
-  const setTodos = (todos: Todo[]) => dispatch(actions.set(todos));
 
   useEffect(() => {
-    setLoading(true);
-
-    getTodos()
-      .then((response) => {
-        setTodos(response);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    dispatch(todosActions.init());
   }, []);
 
   return (
@@ -51,7 +40,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && <TodoModal />}
+      {currentTodo !== null && <TodoModal />}
     </>
   );
 };
